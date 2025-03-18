@@ -1,4 +1,4 @@
-import { MoreHorizontal, MessageSquare, Users, ExternalLink, Edit, Trash2 } from "lucide-react"
+import { MoreHorizontal, MessageSquare, Users, ExternalLink, Edit, Trash2, Code } from 'lucide-react'
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
+import Link from "next/link"
 
 interface AgentCardProps {
   agent: {
@@ -59,13 +60,21 @@ export function AgentCard({ agent }: AgentCardProps) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem className="cursor-pointer" asChild>
+                <Link href={`/dashboard/agents/${agent.id}`}>
+                  <ExternalLink className="mr-2 h-4 w-4" />
+                  View details
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer" asChild>
+                <Link href={`/dashboard/agents/${agent.id}/embed`}>
+                  <Code className="mr-2 h-4 w-4" />
+                  Embed on website
+                </Link>
+              </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer">
                 <Edit className="mr-2 h-4 w-4" />
                 Edit agent
-              </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">
-                <ExternalLink className="mr-2 h-4 w-4" />
-                View analytics
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="cursor-pointer text-destructive focus:text-destructive">
@@ -91,4 +100,3 @@ export function AgentCard({ agent }: AgentCardProps) {
       </Card>
   )
 }
-

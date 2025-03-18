@@ -1,4 +1,4 @@
-import { Bot, MessageSquare, Users, Search, Plus, BarChart3, Workflow } from "lucide-react"
+import { Bot, MessageSquare, Users, Search, Plus, BarChart3, Workflow, ArrowRight, Code } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { AgentCard } from "@/components/dashboard/agent-card"
@@ -8,6 +8,7 @@ import { StatsCard } from "@/components/dashboard/stats-card"
 import { auth } from "@/auth"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent } from "@/components/ui/tabs"
+import Link from "next/link"
 
 export default async function DashboardPage() {
     const session = await auth()
@@ -93,28 +94,93 @@ export default async function DashboardPage() {
                         />
                     </div>
 
+                    {/* Quick Actions Card */}
+                    <Card className="mt-8">
+                        <CardHeader>
+                            <CardTitle>Quick Actions</CardTitle>
+                            <CardDescription>Get started with your AI agents</CardDescription>
+                        </CardHeader>
+                        <CardContent className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                            <Link
+                                href="/dashboard/agents/new"
+                                className="flex items-center justify-between p-3 rounded-lg border hover:bg-muted/50 transition-colors"
+                            >
+                                <div className="flex items-center gap-3">
+                                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10">
+                                        <Bot className="h-4 w-4 text-primary" />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-medium">Create New Agent</h3>
+                                        <p className="text-sm text-muted-foreground">Build a custom AI agent</p>
+                                    </div>
+                                </div>
+                                <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                            </Link>
+
+                            <Link
+                                href="/dashboard/agents/1/embed"
+                                className="flex items-center justify-between p-3 rounded-lg border hover:bg-muted/50 transition-colors"
+                            >
+                                <div className="flex items-center gap-3">
+                                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10">
+                                        <Code className="h-4 w-4 text-primary" />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-medium">Embed on Website</h3>
+                                        <p className="text-sm text-muted-foreground">Add an agent to your site</p>
+                                    </div>
+                                </div>
+                                <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                            </Link>
+
+                            <Link
+                                href="/dashboard/workflows/new"
+                                className="flex items-center justify-between p-3 rounded-lg border hover:bg-muted/50 transition-colors"
+                            >
+                                <div className="flex items-center gap-3">
+                                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10">
+                                        <Workflow className="h-4 w-4 text-primary" />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-medium">Create Workflow</h3>
+                                        <p className="text-sm text-muted-foreground">Connect multiple agents</p>
+                                    </div>
+                                </div>
+                                <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                            </Link>
+                        </CardContent>
+                    </Card>
+
                     <Tabs defaultValue="agents" className="mt-8">
                         <TabsContent value="agents" className="mt-0">
                             {/* Agents section */}
                             <div className="mt-6">
                                 <div className="flex items-center justify-between mb-4">
                                     <h2 className="text-lg font-medium">Your Agents</h2>
-                                    <Button variant="outline" size="sm">
-                                        View All
+                                    <Button variant="outline" size="sm" asChild>
+                                        <Link href="/dashboard/agents">View All</Link>
                                     </Button>
                                 </div>
 
                                 <div className="relative mb-6">
                                     <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                                    <Input placeholder="Search agents..." className="pl-10 bg-background" />
-                                    <Button className="absolute right-1 top-1/2 -translate-y-1/2">
-                                        <Plus className="mr-2 h-4 w-4" /> Create Agent
+                                    <Input placeholder="Search agents..." className="pl-10 w-72 bg-background" />
+                                    <Button className="absolute right-1 top-1/2 -translate-y-1/2" asChild>
+                                        <Link href="/dashboard/agents/new">
+                                            <Plus className="mr-2 h-4 w-4" /> Create Agent
+                                        </Link>
                                     </Button>
                                 </div>
 
                                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                                     {agents.map((agent) => (
-                                        <AgentCard key={agent.id} agent={agent} />
+                                        <Link
+                                            key={agent.id}
+                                            href={`/dashboard/agents/${agent.id}`}
+                                            className="block hover:opacity-95 transition-opacity"
+                                        >
+                                            <AgentCard agent={agent} />
+                                        </Link>
                                     ))}
                                     <CreateAgentCard />
                                 </div>

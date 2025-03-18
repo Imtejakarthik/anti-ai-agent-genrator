@@ -24,6 +24,7 @@ model User {
   sessions      Session[]
   // Optional for WebAuthn support
   Authenticator Authenticator[]
+  agents        Agent[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -82,4 +83,53 @@ model Authenticator {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([userId, credentialID])
+}
+
+// Agent model for AI agents
+model Agent {
+  id          String  @id @default(cuid())
+  name        String
+  description String
+  iconText    String?
+  color       String  @default("bg-blue-500")
+  visibility  String  @default("private") // private, team, public
+
+  // AI Configuration
+  model       String
+  temperature Float  @default(0.7)
+  maxTokens   Int    @default(2000)
+
+  // Capabilities
+  webSearch       Boolean @default(false)
+  codeGeneration  Boolean @default(false)
+  dataAnalysis    Boolean @default(false)
+  imageGeneration Boolean @default(false)
+
+  // Knowledge Base
+  knowledgeBase String  @default("none") // none, documents, website, api
+  websiteUrl    String?
+  apiEndpoint   String?
+
+  // Conversation Settings
+  systemPrompt  String @default("You are a helpful AI assistant that provides accurate and concise information.")
+  greeting      String @default("Hello! How can I help you today?")
+  contextWindow Int    @default(5)
+
+  // Status
+  status String @default("draft") // draft, online, offline
+
+  // Stats
+  messageCount Int @default(0)
+  userCount    Int @default(0)
+
+  // Timestamps
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  lastDeployed DateTime?
+
+  // Relations
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }

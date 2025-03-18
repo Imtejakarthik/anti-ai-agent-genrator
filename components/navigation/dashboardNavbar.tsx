@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { ChevronDown, LogOut, Settings, User, Users, Plus } from "lucide-react"
+import { ChevronDown, LogOut, Settings, User, Users, Plus } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import {
@@ -17,12 +17,13 @@ import {
 import { signOut } from "next-auth/react"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Badge } from "@/components/ui/badge"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 interface DashboardNavbarProps {
     user: {
-        name?: string | null
-        email?: string | null
-        image?: string | null
+        name?: string | null | undefined;
+        email?: string | null | undefined;
+        image?: string | null | undefined;
     }
 }
 
@@ -74,8 +75,8 @@ export function DashboardNavbar({ user }: DashboardNavbarProps) {
                                         <div className="flex flex-col">
                                             <span className="font-medium">{team.name}</span>
                                             <span className="text-xs text-muted-foreground">
-                        {team.members} {team.members === 1 ? "member" : "members"}
-                      </span>
+                                                {team.members} {team.members === 1 ? "member" : "members"}
+                                            </span>
                                         </div>
                                         {team.id === activeTeam.id && <div className="ml-auto h-2 w-2 rounded-full bg-primary"></div>}
                                     </div>
@@ -104,11 +105,7 @@ export function DashboardNavbar({ user }: DashboardNavbarProps) {
             </div>
 
             <div className="flex items-center gap-4">
-                <Button variant="outline" size="sm" className="hidden md:flex gap-2">
-                    <Plus className="h-4 w-4" />
-                    New Agent
-                </Button>
-
+                <ThemeToggle />
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
@@ -155,4 +152,3 @@ export function DashboardNavbar({ user }: DashboardNavbarProps) {
         </header>
     )
 }
-
