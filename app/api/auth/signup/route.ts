@@ -1,15 +1,18 @@
 import { type NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/prisma"
 import { hash } from "bcrypt"
+import { signupSchema } from "@/lib/zodSchema"
 
 export async function POST(req: NextRequest) {
     try {
-        const { name, email, password } = await req.json()
+        const body = await req.json()
 
-        if (!email || !password) {
-            return NextResponse.json({ error: "Email and password are required" }, { status: 400 })
+        const result = signupSchema.safeParse(body)
+        if (!result.success) {
+            return NextResponse.json({ error: "Validation failed", details: result.error.format() }, { status: 400 })
         }
 
+        const { name, email, password } = body
         const existingUser = await prisma.user.findUnique({
             where: { email },
         })
@@ -44,4 +47,3 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "Failed to register user" }, { status: 500 })
     }
 }
-

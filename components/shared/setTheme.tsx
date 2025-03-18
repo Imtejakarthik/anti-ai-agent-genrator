@@ -8,7 +8,7 @@ interface SetThemeProps {
     className?: string
 }
 
-const SetTheme = ({ theme, className }: SetThemeProps = {}) => {
+const SetTheme = ({ theme, className }: SetThemeProps) => {
     const { setTheme: setAppTheme } = useTheme()
 
     useEffect(() => {
@@ -27,10 +27,9 @@ const SetTheme = ({ theme, className }: SetThemeProps = {}) => {
                 document.documentElement.classList.remove(className)
             }
         }
-    }, [setAppTheme, theme, className])
+    }, [theme, className, setAppTheme])
 
     return null
 }
 
 export default SetTheme
-

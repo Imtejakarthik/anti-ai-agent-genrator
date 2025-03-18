@@ -1,24 +1,23 @@
 "use client"
 
 import { useState } from "react"
-import Image from "next/image"
 import Link from "next/link"
+import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { signIn } from "next-auth/react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { Loader } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import {signupImage} from "@/public/images";
-import {signupSchema, signupSchemaType} from "@/lib/zodSchema";
-import {Loader} from "lucide-react";
-import {Button} from "@/components/ui/button";
+import { signupSchema, type signupSchemaType } from "@/lib/zodSchema"
 
 export default function SignupPage() {
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
-    const [success, setSuccess] = useState<string | null>(null)
 
     const form = useForm<signupSchemaType>({
         resolver: zodResolver(signupSchema),
@@ -33,10 +32,9 @@ export default function SignupPage() {
     const onSubmit = async (values: signupSchemaType) => {
         setIsLoading(true)
         setError(null)
-        setSuccess(null)
 
         try {
-            const response = await fetch("/api/auth/signup", {
+            const response = await fetch("/api/auth/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -51,37 +49,46 @@ export default function SignupPage() {
             const data = await response.json()
 
             if (!response.ok) {
-                setError(data.error || "Failed to register")
-                setIsLoading(false)
+                console.error(data.error || "Failed to register")
+            }
+
+            const result = await signIn("credentials", {
+                email: values.email,
+                password: values.password,
+                redirect: false,
+            })
+
+            if (result?.error) {
+                setError("Registration successful, but failed to log in automatically")
                 return
             }
 
-            setSuccess("Account created successfully! Redirecting to login...")
-
-            setTimeout(() => {
-                router.push("/login")
-            }, 2000)
+            router.push("/dashboard")
+            router.refresh()
         } catch (error) {
-            console.error(error)
-            setError(`An error occurred during registration`)
+            console.error("Registration error:", error)
+            setError(error instanceof Error ? error.message : "Failed to register")
+        } finally {
             setIsLoading(false)
         }
     }
 
     const handleGoogleSignIn = async () => {
-        setIsLoading(true)
-        setError(null)
         try {
-            await signIn("google", { callbackUrl: "/dashboard" })
+            setIsLoading(true)
+            setError(null)
+            await signIn("google", {
+                callbackUrl: "/dashboard",
+            })
         } catch (error) {
             console.error("Google sign-in error:", error)
-            setError("Failed to sign in with Google")
+            setError("An error occurred with Google sign in")
             setIsLoading(false)
         }
     }
 
     return (
-        <div className="min-h-screen flex flex-col md:flex-row bg-white">
+        <div className="min-h-screen flex flex-col md:flex-row">
             {/* Left Column - Image and Text */}
             <div className="w-full md:w-1/2 bg-gray-50 p-8 flex-col justify-center hidden md:flex">
                 <div className="max-w-md mx-auto">
@@ -102,7 +109,7 @@ export default function SignupPage() {
             </div>
 
             {/* Right Column - Sign Up Form */}
-            <div className="w-full md:w-1/2 p-8 flex items-center justify-center bg-white">
+            <div className="w-full md:w-1/2 p-8 flex items-center justify-center bg-white max-sm:mt-12">
                 <div className="w-full max-w-md space-y-6">
                     <div className="text-center">
                         <h2 className="text-3xl font-bold text-gray-900">Get Started</h2>
@@ -111,13 +118,9 @@ export default function SignupPage() {
 
                     {error && <div className="bg-red-50 border border-red-200 text-red-700 p-3 rounded-md">{error}</div>}
 
-                    {success && (
-                        <div className="bg-green-50 border border-green-200 text-green-700 p-3 rounded-md">{success}</div>
-                    )}
-
-                    <button
+                    <Button
                         type="button"
-                        className="w-full flex items-center justify-center gap-2 border border-gray-300 bg-white text-gray-700 p-2.5 rounded-md hover:bg-gray-50 transition-colors"
+                        className="w-full flex items-center justify-center gap-2 border border-gray-300 bg-white text-gray-700 p-2.5 rounded-md hover:bg-gray-50 transition-colors mb-4"
                         onClick={handleGoogleSignIn}
                         disabled={isLoading}
                     >
@@ -141,7 +144,7 @@ export default function SignupPage() {
                             <path d="M1 1h22v22H1z" fill="none" />
                         </svg>
                         Sign up with Google
-                    </button>
+                    </Button>
 
                     <div className="relative">
                         <div className="absolute inset-0 flex items-center">
@@ -156,15 +159,15 @@ export default function SignupPage() {
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                             <FormField
                                 control={form.control}
-                                name="email"
+                                name="name"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel className="text-gray-700">Email</FormLabel>
+                                        <FormLabel className="text-gray-700">Name</FormLabel>
                                         <FormControl>
                                             <Input
-                                                placeholder="name@example.com"
-                                                type="email"
+                                                placeholder="Your name"
                                                 className="bg-white text-gray-900 border-gray-300"
+                                                autoComplete="name"
                                                 {...field}
                                             />
                                         </FormControl>
@@ -175,14 +178,16 @@ export default function SignupPage() {
 
                             <FormField
                                 control={form.control}
-                                name="name"
+                                name="email"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel className="text-gray-700">Name</FormLabel>
+                                        <FormLabel className="text-gray-700">Email</FormLabel>
                                         <FormControl>
                                             <Input
-                                                placeholder="Your full name"
+                                                placeholder="name@example.com"
+                                                type="email"
                                                 className="bg-white text-gray-900 border-gray-300"
+                                                autoComplete="email"
                                                 {...field}
                                             />
                                         </FormControl>
@@ -198,7 +203,12 @@ export default function SignupPage() {
                                     <FormItem>
                                         <FormLabel className="text-gray-700">Password</FormLabel>
                                         <FormControl>
-                                            <Input type="password" className="bg-white text-gray-900 border-gray-300" {...field} />
+                                            <Input
+                                                type="password"
+                                                className="bg-white text-gray-900 border-gray-300"
+                                                autoComplete="new-password"
+                                                {...field}
+                                            />
                                         </FormControl>
                                         <FormMessage className="text-red-600" />
                                     </FormItem>
@@ -212,7 +222,12 @@ export default function SignupPage() {
                                     <FormItem>
                                         <FormLabel className="text-gray-700">Confirm Password</FormLabel>
                                         <FormControl>
-                                            <Input type="password" className="bg-white text-gray-900 border-gray-300" {...field} />
+                                            <Input
+                                                type="password"
+                                                className="bg-white text-gray-900 border-gray-300"
+                                                autoComplete="new-password"
+                                                {...field}
+                                            />
                                         </FormControl>
                                         <FormMessage className="text-red-600" />
                                     </FormItem>
@@ -224,18 +239,16 @@ export default function SignupPage() {
                                 className="w-full p-2.5 rounded-md transition-colors flex flex-row items-center justify-center gap-2"
                                 disabled={isLoading}
                             >
-                                {isLoading && (
-                                    <Loader className="animate-spin"/>
-                                )}
-                                {isLoading ? "Creating account..." : "Create account"}
+                                {isLoading && <Loader className="h-4 w-4 animate-spin" />}
+                                {isLoading ? "Creating account..." : "Create Account"}
                             </Button>
                         </form>
                     </Form>
 
-                    <div className="text-center text-sm text-gray-600">
+                    <div className="text-center mt-6 text-sm text-gray-600">
                         Already have an account?{" "}
                         <Link href="/login" className="text-violet-600 hover:underline">
-                            Log in
+                            Login
                         </Link>
                     </div>
                 </div>
