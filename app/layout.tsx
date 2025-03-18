@@ -4,6 +4,8 @@ import "./globals.css";
 import { ReactNode } from "react";
 import { Toaster } from "@/components/ui/toaster"
 import { ThemeProvider } from "@/components/ui/theme-provider"
+import { SessionProvider } from "next-auth/react"
+import { auth } from "@/auth"
 
 
 const SpaceGrotesk = localFont({
@@ -18,20 +20,24 @@ export const metadata: Metadata = {
 };
 
 const RootLayout = async ({ children }: { children: ReactNode }) => {
-  return (
+    const session = await auth()
+
+    return (
     <html lang="en">
-      <body
-          className={`${SpaceGrotesk.className} antialiased`}
-      >
-      <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-      >
-          {children}
-          <Toaster />
-      </ThemeProvider>
-      </body>
+    <SessionProvider session={session}>
+        <body
+            className={`${SpaceGrotesk.className} antialiased`}
+        >
+        <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+        >
+            {children}
+            <Toaster />
+        </ThemeProvider>
+        </body>
+    </SessionProvider>
     </html>
   );
 }
