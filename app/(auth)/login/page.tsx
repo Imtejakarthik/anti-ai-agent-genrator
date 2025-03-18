@@ -20,14 +20,6 @@ export default function LoginPage() {
         searchParams.get("error") === "OAuthAccountNotLinked" ? "Email already in use with different provider" : null,
     )
 
-    useEffect(() => {
-        document.documentElement.classList.remove("dark")
-        document.documentElement.classList.add("light-theme")
-        return () => {
-            document.documentElement.classList.remove("light-theme")
-        }
-    }, [])
-
     const form = useForm<loginSchemaType>({
         resolver: zodResolver(loginSchema),
         defaultValues: {

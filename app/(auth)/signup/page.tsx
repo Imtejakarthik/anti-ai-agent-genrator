@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -19,14 +19,6 @@ export default function SignupPage() {
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [success, setSuccess] = useState<string | null>(null)
-
-    useEffect(() => {
-        document.documentElement.classList.remove("dark")
-        document.documentElement.classList.add("light-theme")
-        return () => {
-            document.documentElement.classList.remove("light-theme")
-        }
-    }, [])
 
     const form = useForm<signupSchemaType>({
         resolver: zodResolver(signupSchema),
