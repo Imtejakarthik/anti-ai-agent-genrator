@@ -43,46 +43,34 @@ export default function LoginPage() {
 
             if (result?.error) {
                 setError("Invalid email or password")
+                setIsLoading(false)
                 return
             }
 
-            // Redirect to dashboard
             router.push("/dashboard")
-            router.refresh()
         } catch (error) {
-            console.error("Login error:", error)
+            console.error(error)
             setError("An error occurred during sign in")
-        } finally {
             setIsLoading(false)
         }
     }
 
     const handleGoogleSignIn = async () => {
-        try {
-            setIsLoading(true)
-            setError(null)
-            await signIn("google", {
-                callbackUrl: "/dashboard",
-            })
-        } catch (error) {
-            console.error("Google sign-in error:", error)
-            setError("An error occurred with Google sign in")
-            setIsLoading(false)
-        }
+        setIsLoading(true)
+        setError(null)
+        await signIn("google", {
+            callbackUrl: "/dashboard",
+        })
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="min-h-screen flex items-center justify-center bg-white p-4">
             <div className="w-full max-w-md">
                 <div className="text-center mb-8">
                     <h1 className="text-3xl font-bold text-gray-900">Login to Agent Builder</h1>
                 </div>
 
-                {error && (
-                    <div className="bg-red-50 border border-red-200 text-red-700 p-3 rounded-md mb-6">
-                        {error}
-                    </div>
-                )}
+                {error && <div className="bg-red-50 border border-red-200 text-red-700 p-3 rounded-md mb-6">{error}</div>}
 
                 <Button
                     type="button"
@@ -134,7 +122,6 @@ export default function LoginPage() {
                                             placeholder="name@example.com"
                                             type="email"
                                             className="bg-white text-gray-900 border-gray-300"
-                                            autoComplete="email"
                                             {...field}
                                         />
                                     </FormControl>
@@ -155,12 +142,7 @@ export default function LoginPage() {
                                         </Link>
                                     </div>
                                     <FormControl>
-                                        <Input
-                                            type="password"
-                                            className="bg-white text-gray-900 border-gray-300"
-                                            autoComplete="current-password"
-                                            {...field}
-                                        />
+                                        <Input type="password" className="bg-white text-gray-900 border-gray-300" {...field} />
                                     </FormControl>
                                     <FormMessage className="text-red-600" />
                                 </FormItem>
@@ -172,7 +154,7 @@ export default function LoginPage() {
                             className="w-full p-2.5 rounded-md transition-colors flex flex-row items-center justify-center gap-2"
                             disabled={isLoading}
                         >
-                            {isLoading && <Loader className="h-4 w-4 animate-spin" />}
+                            {isLoading && <Loader className="animate-spin" />}
                             {isLoading ? "Signing in..." : "Login with Email"}
                         </Button>
                     </form>
