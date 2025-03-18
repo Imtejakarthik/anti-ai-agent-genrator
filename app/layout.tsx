@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local"
 import "./globals.css";
 import { ReactNode } from "react";
+import { Toaster } from "@/components/ui/toaster"
+import { ThemeProvider } from "@/components/ui/theme-provider"
 
 
 const SpaceGrotesk = localFont({
@@ -21,7 +23,14 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
       <body
           className={`${SpaceGrotesk.className} antialiased`}
       >
-        {children}
+      <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+      >
+          {children}
+          <Toaster />
+      </ThemeProvider>
       </body>
     </html>
   );
