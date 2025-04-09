@@ -35,18 +35,7 @@
 
 ---
 
-## 🧩 Architecture
 
-```mermaid
-graph TD
-  A[User Prompt] --> B[Planner Agent]
-  B --> C[Task Breakdown]
-  C --> D[Executor Agent]
-  D --> E[Tool/Plugin]
-  E --> F[Environment/API]
-  F --> G[Result]
-  G --> H[Memory Storage]
-  H --> I[Feedback Loop]
 🛠️ Setup & Installation
  # Clone the repo
 git clone https://github.com/yourusername/ai-agent-automation.git
