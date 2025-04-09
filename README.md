@@ -1,6 +1,8 @@
 # 🤖 AI Agent Automation
 
-AI Agent Automation is a powerful, modular system designed to automate complex workflows using intelligent agents. Whether you're streamlining customer support, managing data pipelines, or automating research, this platform provides customizable AI-driven agents that think, plan, and act on your behalf.
+**AI Agent Automation** is a powerful, modular system designed to automate complex workflows using intelligent agents. Whether you're streamlining customer support, managing data pipelines, or automating research, this platform provides customizable AI-driven agents that think, plan, and act on your behalf.
+
+---
 
 ## ✨ Features
 
@@ -11,6 +13,8 @@ AI Agent Automation is a powerful, modular system designed to automate complex w
 - 🧾 **Memory & Reasoning**: Agents learn from history and context to make smarter decisions.
 - 💬 **Natural Language Interface**: Interact with agents through simple prompts.
 
+---
+
 ## 🚀 Use Cases
 
 - 📝 Automated research and report generation  
@@ -19,13 +23,17 @@ AI Agent Automation is a powerful, modular system designed to automate complex w
 - 💼 Business task automation (CRM, ticketing, scheduling)  
 - 🛒 AI agents for e-commerce & customer support  
 
+---
+
 ## 🏗️ Tech Stack
 
-- **Language Model**: OpenAI / Claude / LLaMA / Custom fine-tuned models
-- **Frameworks**: LangChain / AutoGen / React / FastAPI / Flask / Next.js
-- **Storage**: PostgreSQL / Redis / Pinecone / MongoDB
-- **Memory**: VectorDB (e.g., FAISS, Chroma) + Custom Long-Term Memory
-- **Deployment**: Docker, Vercel, AWS, Railway
+- **Language Models**: OpenAI / Claude / LLaMA / Custom fine-tuned models  
+- **Frameworks**: LangChain / AutoGen / React / FastAPI / Flask / Next.js  
+- **Storage**: PostgreSQL / Redis / Pinecone / MongoDB  
+- **Memory**: VectorDB (e.g., FAISS, Chroma) + Custom Long-Term Memory  
+- **Deployment**: Docker, Vercel, AWS, Railway  
+
+---
 
 ## 🧩 Architecture
 
@@ -40,9 +48,7 @@ graph TD
   G --> H[Memory Storage]
   H --> I[Feedback Loop]
 🛠️ Setup & Installation
-bash
-Copy code
-# Clone the repo
+ # Clone the repo
 git clone https://github.com/yourusername/ai-agent-automation.git
 cd ai-agent-automation
 
@@ -51,11 +57,7 @@ pip install -r requirements.txt
 
 # Run the app
 python app.py
-🧪 Example Prompt
-css
-Copy code
-"Research the top 3 AI trends in 2025 and create a one-page summary in bullet points."
-Agent responds with structured, actionable output based on web scraping, summarization, and formatting.
+
 
 📦 Roadmap
  Basic task planning and execution
@@ -72,15 +74,4 @@ Agent responds with structured, actionable output based on web scraping, summari
 Pull requests are welcome! For major changes, please open an issue first to discuss what you’d like to change.
 
 📄 License
-MIT License
-
-🙌 Acknowledgements
-LangChain
-
-OpenAI
-
-AutoGPT
-
-VectorDBs
-
-🧠 Built for the future of autonomous intelligence.
+This project is licensed under the MIT License.
