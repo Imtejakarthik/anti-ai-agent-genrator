@@ -38,7 +38,7 @@
 
 🛠️ Setup & Installation
  # Clone the repo
-git clone https://github.com/yourusername/ai-agent-automation.git
+git clone (https://github.com/Imtejakarthik/anti-ai-agent-genrator.git)
 cd ai-agent-automation
 
 # Install dependencies
